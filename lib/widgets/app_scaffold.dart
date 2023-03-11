@@ -20,12 +20,14 @@ class AppScaffold extends StatelessWidget {
           leading: screenName == 'New Post' ? BackButton() : null,
         ),
         body: screen,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: screenName == 'Wasteagram'
-            ? FloatingActionButton(
+            ? FloatingActionButton(                    
                 onPressed: () {
                   Navigator.pushNamed(context, NewPost.routeName);
                 },
                 child: const Icon(Icons.camera_alt),
+                
               )
             : null);
   }
