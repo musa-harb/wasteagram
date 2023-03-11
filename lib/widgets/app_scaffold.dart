@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../screens/homepage.dart';
+import '../screens/new_post.dart';
 
 class AppScaffold extends StatelessWidget {
   final String screenName;
@@ -24,11 +25,12 @@ class AppScaffold extends StatelessWidget {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: screenName == 'Wasteagram'
             ? FloatingActionButton(
-                onPressed: () {
+                onPressed: () async {
                   HomePageState homePageState =
                       context.findAncestorStateOfType<HomePageState>()
                           as HomePageState;
-                  homePageState.getImage();
+                  final image = await homePageState.getImage();
+                  Navigator.pushNamed(context, NewPost.routeName, arguments: image);
                 },
                 child: const Icon(Icons.camera_alt),
               )

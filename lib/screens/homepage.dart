@@ -18,12 +18,11 @@ class HomePageState extends State<HomePage> {
   File? image;
   final picker = ImagePicker();
 
-  void getImage() async {
+  Future getImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
     image = File(pickedFile!.path);
-    if (!context.mounted) return;
-    Navigator.pushNamed(context, NewPost.routeName, arguments: image);
     setState(() {});
+    return image;
   }
 
   @override
@@ -34,5 +33,4 @@ class HomePageState extends State<HomePage> {
           child: CircularProgressIndicator(),
         ));
   }
-
 }
