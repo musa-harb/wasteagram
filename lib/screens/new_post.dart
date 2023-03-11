@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import '../widgets/app_scaffold.dart';
 
 class NewPost extends StatelessWidget {
@@ -8,8 +9,14 @@ class NewPost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AppScaffold(
+    return AppScaffold(
         screenName: screenName,
-        screen: Center(child: CircularProgressIndicator()));
+        screen: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Expanded(child: Placeholder()),
+            Expanded(child: Placeholder())
+          ],
+    ));
   }
 }
