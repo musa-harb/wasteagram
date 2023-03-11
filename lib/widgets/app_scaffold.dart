@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../screens/new_post.dart';
+import '../screens/homepage.dart';
 
 class AppScaffold extends StatelessWidget {
   final String screenName;
@@ -22,12 +22,14 @@ class AppScaffold extends StatelessWidget {
         body: screen,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: screenName == 'Wasteagram'
-            ? FloatingActionButton(                    
+            ? FloatingActionButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, NewPost.routeName);
+                  HomePageState homePageState =
+                      context.findAncestorStateOfType<HomePageState>()
+                          as HomePageState;
+                  homePageState.getImage();
                 },
                 child: const Icon(Icons.camera_alt),
-                
               )
             : null);
   }
