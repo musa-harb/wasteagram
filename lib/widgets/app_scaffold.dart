@@ -17,8 +17,9 @@ class AppScaffold extends StatelessWidget {
         appBar: AppBar(
           title: Text(screenName),
           centerTitle: true,
-          leading: screenName == 'New Post' ? BackButton() : null,
+          leading: screenName == 'New Post' ? const BackButton() : null,
         ),
+        resizeToAvoidBottomInset: false,
         body: screen,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: screenName == 'Wasteagram'

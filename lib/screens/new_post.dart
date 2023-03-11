@@ -21,13 +21,14 @@ class _NewPostState extends State<NewPost> {
     return AppScaffold(
         screenName: NewPost.screenName,
         screen: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(child: Image.file(image)),
-            Expanded(child: numberOfWaste()),
-            saveButton(context),
-          ],
-        ));
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(child: Image.file(image)),
+          Expanded(child: numberOfWaste()),          
+          saveButton(context),
+        ],
+        )
+    );
   }
 
   Widget numberOfWaste() {
