@@ -17,8 +17,7 @@ class AppScaffold extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text(screenName),
-          centerTitle: true,
-          leading: screenName == 'New Post' ? const BackButton() : null,
+          centerTitle: true,          
         ),
         resizeToAvoidBottomInset: false,
         body: screen,

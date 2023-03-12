@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:wasteagram/screens/new_post.dart';
-import 'package:wasteagram/widgets/app_scaffold.dart';
+import 'post_details.dart';
+import '../widgets/app_scaffold.dart';
 import '../models/post.dart';
 
 class HomePage extends StatefulWidget {
@@ -46,9 +46,11 @@ class HomePageState extends State<HomePage> {
                               return GestureDetector(
                                 child: listTileWidget(
                                     post['date'], post['quantity']),
-                                onTap: () {
-                                  postDetail = Post.fromMap(post.data());
-                                  
+                                onTap: () {                                  
+                                  Navigator.pushNamed(
+                                      context, 
+                                      PostDetails.routeName, 
+                                      arguments: Post.fromMap(post.data()));
                                 },
                               );
                             }))
