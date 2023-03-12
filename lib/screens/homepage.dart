@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:wasteagram/screens/new_post.dart';
 import 'package:wasteagram/widgets/app_scaffold.dart';
+import '../models/post.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/';
@@ -19,6 +20,7 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   File? image;
   final picker = ImagePicker();
+  Post? postDetail;
 
   Future getImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
@@ -40,9 +42,15 @@ class HomePageState extends State<HomePage> {
                         child: ListView.builder(
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
-                              var post = snapshot.data!.docs[index];                              
-                              return listTileWidget(
-                                  post['date'], post['quantity']);
+                              var post = snapshot.data!.docs[index];
+                              return GestureDetector(
+                                child: listTileWidget(
+                                    post['date'], post['quantity']),
+                                onTap: () {
+                                  postDetail = Post.fromMap(post.data());
+                                  
+                                },
+                              );
                             }))
                   ],
                 );

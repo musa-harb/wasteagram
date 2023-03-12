@@ -1,10 +1,8 @@
-import 'dart:ffi';
-
 class Post {
   final DateTime postDate;
   final String postURL;
-  final Float latitude;
-  final Float longitude;
+  final double latitude;
+  final double longitude;
   final int wasteQty;
 
   const Post(
@@ -14,13 +12,13 @@ class Post {
       required this.longitude,
       required this.wasteQty});
 
-  factory Post.fromJSON(Map<String, dynamic> json) {
+  factory Post.fromMap(Map<dynamic, dynamic> postDetails) {
     return Post(
-      postDate: json['date'],
-      postURL: json['url'],
-      latitude: json['latitude'],
-      longitude: json['longitude'],
-      wasteQty: json['wasteQty'],
+      postDate: DateTime.parse(postDetails['date']),
+      postURL: postDetails['imageURL'],
+      latitude: postDetails['latitude'],
+      longitude: postDetails['longitude'],
+      wasteQty: postDetails['quantity'],
     );
   }
 }
