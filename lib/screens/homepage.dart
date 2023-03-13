@@ -33,13 +33,13 @@ class HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     totalWaste = 0;
-    setState(() {
-      
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {});
+    });
     return AppScaffold(
         screenName: '${HomePage.screenName} - $totalWaste',
         screen: StreamBuilder(
@@ -57,9 +57,10 @@ class HomePageState extends State<HomePage> {
                               var post = snapshot.data!.docs[index];
 
                               tempTotalWaste += post['quantity'] as int;
-                              if (totalWaste! < tempTotalWaste && index == snapshot.data!.docs.length-1) {
-                                totalWaste = tempTotalWaste;                                                      
-                              }                       
+                              if (totalWaste! < tempTotalWaste &&
+                                  index == snapshot.data!.docs.length - 1) {
+                                totalWaste = tempTotalWaste;
+                              }
                               print('total waste: $totalWaste');
                               print(tempTotalWaste);
 
