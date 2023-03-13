@@ -21,6 +21,7 @@ class HomePageState extends State<HomePage> {
   File? image;
   final picker = ImagePicker();
   Post? postDetail;
+  int? totalWaste;
 
   Future getImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
@@ -29,12 +30,23 @@ class HomePageState extends State<HomePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    totalWaste = 0;
+    setState(() {
+      
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AppScaffold(
-        screenName: HomePage.screenName,
+        screenName: '${HomePage.screenName} - $totalWaste',
         screen: StreamBuilder(
             stream: FirebaseFirestore.instance.collection('posts').snapshots(),
             builder: (context, snapshot) {
+              var tempTotalWaste = 0;
+              print('tempTotalWaste $tempTotalWaste');
               if (snapshot.hasData) {
                 return Column(
                   children: [
@@ -43,13 +55,20 @@ class HomePageState extends State<HomePage> {
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
                               var post = snapshot.data!.docs[index];
+
+                              tempTotalWaste += post['quantity'] as int;
+                              if (totalWaste! < tempTotalWaste && index == snapshot.data!.docs.length-1) {
+                                totalWaste = tempTotalWaste;                                                      
+                              }                       
+                              print('total waste: $totalWaste');
+                              print(tempTotalWaste);
+
                               return GestureDetector(
                                 child: listTileWidget(
                                     post['date'], post['quantity']),
-                                onTap: () {                                  
+                                onTap: () {
                                   Navigator.pushNamed(
-                                      context, 
-                                      PostDetails.routeName, 
+                                      context, PostDetails.routeName,
                                       arguments: Post.fromMap(post.data()));
                                 },
                               );
@@ -79,4 +98,6 @@ class HomePageState extends State<HomePage> {
     final modifiedDateTime = '$day, $month';
     return modifiedDateTime;
   }
+
+  void updateTotalWaste() {}
 }

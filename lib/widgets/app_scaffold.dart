@@ -17,22 +17,32 @@ class AppScaffold extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text(screenName),
-          centerTitle: true,          
+          centerTitle: true,
         ),
         resizeToAvoidBottomInset: false,
         body: screen,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: screenName == 'Wasteagram'
-            ? FloatingActionButton(
-                onPressed: () async {
-                  HomePageState homePageState =
-                      context.findAncestorStateOfType<HomePageState>()
-                          as HomePageState;
-                  final image = await homePageState.getImage();
-                  Navigator.pushNamed(context, NewPost.routeName, arguments: image);
-                },
-                child: const Icon(Icons.camera_alt),
-              )
-            : null);
+        floatingActionButton:
+            checkScreenName(screenName) ? fab(context) : null);
   }
+
+  bool checkScreenName(String screenName) {
+    return (screenName != 'Wasteagram' && screenName != 'New Post');
+  }
+
+  Widget fab(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () async {
+        HomePageState homePageState =
+            context.findAncestorStateOfType<HomePageState>() as HomePageState;
+        final image = await homePageState.getImage();
+        Navigator.pushNamed(context, NewPost.routeName, arguments: image);
+      },
+      child: const Icon(Icons.camera_alt),
+    );
+  }
+
+
+
+
 }
