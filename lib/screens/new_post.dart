@@ -43,6 +43,12 @@ class _NewPostState extends State<NewPost> {
       child: TextFormField(
         keyboardType: TextInputType.number,
         autofocus: true,
+        textAlign: TextAlign.center,
+        decoration: const InputDecoration(
+          hintText: "Number of Wasted Items",
+          
+        ),
+        
         onSaved: (value) {
           saveToDataBase(int.parse(value as String));
         },
@@ -53,15 +59,18 @@ class _NewPostState extends State<NewPost> {
   }
 
   Widget saveButton(BuildContext context) {
-    return ElevatedButton(
-        onPressed: () {
-          if (formKey.currentState!.validate()) {
-            formKey.currentState!.save();
-            print('Saving.....!');
-            Navigator.pop(context);
-          }
-        },
-        child: const Icon(Icons.cloud_upload));
+    return FractionallySizedBox(
+      widthFactor: 1,
+      child: ElevatedButton(
+          onPressed: () {
+            if (formKey.currentState!.validate()) {
+              formKey.currentState!.save();
+              print('Saving.....!');
+              Navigator.pop(context);
+            }
+          },
+          child: const Icon(Icons.cloud_upload)),
+    );
   }
 
   void saveToDataBase(int wasteQty) async {

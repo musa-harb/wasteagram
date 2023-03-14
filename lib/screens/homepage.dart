@@ -37,8 +37,7 @@ class HomePageState extends State<HomePage> {
         screen: StreamBuilder(
             stream: FirebaseFirestore.instance.collection('posts').snapshots(),
             builder: (context, snapshot) {
-              tempTotalWaste = 0;
-              print('Printing ${snapshot.hasData}');
+              tempTotalWaste = 0;              
               if (!snapshot.hasData) {
                 return const Center(child: CircularProgressIndicator());
               }
@@ -49,7 +48,7 @@ class HomePageState extends State<HomePage> {
                   }
                 });
                 return const Center(child: Text('No wastes posts recorded!'));
-              }
+                }
 
               return Column(
                 children: [
@@ -61,40 +60,39 @@ class HomePageState extends State<HomePage> {
                               updateTotalWaste();
                             });
 
-                            var post = snapshot.data!.docs[index];
+                            Post post = Post.fromMap(snapshot.data!.docs[index].data());
 
                             tempTotalWaste =
-                                tempTotalWaste + post['quantity'] as int;
+                                tempTotalWaste + post.wasteQty;
 
                             return GestureDetector(
                               child: listTileWidget(
-                                  post['date'], post['quantity']),
+                                  post.postDate, post.wasteQty),
                               onTap: () {
                                 Navigator.pushNamed(
                                     context, PostDetails.routeName,
-                                    arguments: Post.fromMap(post.data()));
+                                    arguments: post);
                               },
                             );
                           }))
                 ],
-              );
-            }));
+            );
+          }
+        )
+      );
   }
 
-  Widget listTileWidget(String date, int qty) {
+  Widget listTileWidget(DateTime date, int qty) {
     return ListTile(
       leading: Text(formateDate(date)),
-      trailing: Text(
-        qty.toString(),
-      ),
+      trailing: Text(qty.toString()),
       dense: true,
     );
   }
 
-  String formateDate(String dateTime) {
-    final postDateTime = DateTime.parse(dateTime);
-    final day = DateFormat.EEEE().format(postDateTime).toString();
-    final month = DateFormat.yMMMMd().format(postDateTime).toString();
+  String formateDate(DateTime dateTime) {    
+    final day = DateFormat.EEEE().format(dateTime).toString();
+    final month = DateFormat.yMMMMd().format(dateTime).toString();
     final modifiedDateTime = '$day, $month';
     return modifiedDateTime;
   }
