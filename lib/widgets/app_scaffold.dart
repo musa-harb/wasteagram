@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../screens/homepage.dart';
 import '../screens/new_post.dart';
+import '../screens/post_details.dart';
 
 class AppScaffold extends StatelessWidget {
   final String screenName;
@@ -27,7 +28,7 @@ class AppScaffold extends StatelessWidget {
   }
 
   bool checkScreenName(String screenName) {
-    return (screenName != 'Wasteagram' && screenName != 'New Post');
+    return (screenName != NewPost.screenName && screenName != PostDetails.screenName);
   }
 
   Widget fab(BuildContext context) {
@@ -41,8 +42,4 @@ class AppScaffold extends StatelessWidget {
       child: const Icon(Icons.camera_alt),
     );
   }
-
-
-
-
 }

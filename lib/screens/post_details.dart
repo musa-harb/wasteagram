@@ -6,14 +6,14 @@ import '../models/post.dart';
 
 class PostDetails extends StatelessWidget {
   static const routeName = 'details';
+  static const screenName = 'Wasteagram';
   const PostDetails({super.key});
 
   @override
   Widget build(BuildContext context) {
     Post postDetails = ModalRoute.of(context)?.settings.arguments as Post;
-    print(postDetails.latitude);
     return AppScaffold(
-        screenName: 'Wasteagram',
+        screenName: screenName,
         screen: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
