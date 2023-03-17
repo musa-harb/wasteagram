@@ -26,8 +26,10 @@ class HomePageState extends State<HomePage> {
 
   Future getImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
-    image = File(pickedFile!.path);
-    return image;
+    if(pickedFile != null){
+      image = File(pickedFile.path);    
+      return image;
+    }    
   }
 
   @override
@@ -37,7 +39,7 @@ class HomePageState extends State<HomePage> {
         screen: StreamBuilder(
             stream: FirebaseFirestore.instance.collection('posts').snapshots(),
             builder: (context, snapshot) {
-              tempTotalWaste = 0;              
+              tempTotalWaste = 0;
               if (!snapshot.hasData) {
                 return const Center(child: CircularProgressIndicator());
               }
@@ -48,7 +50,7 @@ class HomePageState extends State<HomePage> {
                   }
                 });
                 return const Center(child: Text('No wastes posts recorded!'));
-                }
+              }
 
               return Column(
                 children: [
@@ -60,14 +62,14 @@ class HomePageState extends State<HomePage> {
                               updateTotalWaste();
                             });
 
-                            Post post = Post.fromMap(snapshot.data!.docs[index].data());
+                            Post post =
+                                Post.fromMap(snapshot.data!.docs[index].data());
 
-                            tempTotalWaste =
-                                tempTotalWaste + post.wasteQty;
+                            tempTotalWaste = tempTotalWaste + post.wasteQty;
 
                             return GestureDetector(
-                              child: listTileWidget(
-                                  post.postDate, post.wasteQty),
+                              child:
+                                  listTileWidget(post.postDate, post.wasteQty),
                               onTap: () {
                                 Navigator.pushNamed(
                                     context, PostDetails.routeName,
@@ -76,10 +78,8 @@ class HomePageState extends State<HomePage> {
                             );
                           }))
                 ],
-            );
-          }
-        )
-      );
+              );
+            }));
   }
 
   Widget listTileWidget(DateTime date, int qty) {
@@ -90,7 +90,7 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  String formateDate(DateTime dateTime) {    
+  String formateDate(DateTime dateTime) {
     final day = DateFormat.EEEE().format(dateTime).toString();
     final month = DateFormat.yMMMMd().format(dateTime).toString();
     final modifiedDateTime = '$day, $month';

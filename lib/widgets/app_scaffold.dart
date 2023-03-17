@@ -28,7 +28,8 @@ class AppScaffold extends StatelessWidget {
   }
 
   bool checkScreenName(String screenName) {
-    return (screenName != NewPost.screenName && screenName != PostDetails.screenName);
+    return (screenName != NewPost.screenName &&
+        screenName != PostDetails.screenName);
   }
 
   Widget fab(BuildContext context) {
@@ -37,7 +38,9 @@ class AppScaffold extends StatelessWidget {
         HomePageState homePageState =
             context.findAncestorStateOfType<HomePageState>() as HomePageState;
         final image = await homePageState.getImage();
-        Navigator.pushNamed(context, NewPost.routeName, arguments: image);
+        if (image != null) {
+          Navigator.pushNamed(context, NewPost.routeName, arguments: image);
+        }
       },
       child: const Icon(Icons.camera_alt),
     );

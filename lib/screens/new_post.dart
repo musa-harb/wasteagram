@@ -24,20 +24,19 @@ class _NewPostState extends State<NewPost> {
   @override
   Widget build(BuildContext context) {
     image = ModalRoute.of(context)?.settings.arguments as File;
-    print(image);
     return AppScaffold(
         screenName: NewPost.screenName,
         screen: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(child: Image.file(image!)),
-            Expanded(child: numberOfWaste()),
+            Expanded(child: enterNumberOfWaste()),
             saveButton(context),
           ],
         ));
   }
 
-  Widget numberOfWaste() {
+  Widget enterNumberOfWaste() {
     return Form(
       key: formKey,
       child: TextFormField(
@@ -45,10 +44,9 @@ class _NewPostState extends State<NewPost> {
         autofocus: true,
         textAlign: TextAlign.center,
         decoration: const InputDecoration(
-          hintText: "Number of Wasted Items",
-          
+          hintText: "Number of Wasted Items",          
         ),
-        
+        style: Theme.of(context).textTheme.headlineMedium,
         onSaved: (value) {
           saveToDataBase(int.parse(value as String));
         },
@@ -65,7 +63,6 @@ class _NewPostState extends State<NewPost> {
           onPressed: () {
             if (formKey.currentState!.validate()) {
               formKey.currentState!.save();
-              print('Saving.....!');
               Navigator.pop(context);
             }
           },

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:transparent_image/transparent_image.dart';
 import '../widgets/app_scaffold.dart';
 import '../models/post.dart';
 
@@ -14,13 +15,27 @@ class PostDetails extends StatelessWidget {
     return AppScaffold(
         screenName: screenName,
         screen: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+          child: Column(            
             children: [
-              Text(formateDateTime(postDetails.postDate)),
-              Image.network(postDetails.postURL),
-              Text(postDetails.wasteQty.toString()),
-              Text('Location: (${postDetails.latitude}, ${postDetails.longitude})')
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 16.0, 0, 36.0),
+                child: Text(formateDateTime(postDetails.postDate),
+                    style: Theme.of(context).textTheme.headlineSmall),
+              ),
+              Expanded(
+                child: FadeInImage.memoryNetwork(
+                    placeholder: kTransparentImage, image: postDetails.postURL),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 16.0, 0, 16.0),
+                child: Text('${postDetails.wasteQty.toString()} items',
+                    style: Theme.of(context).textTheme.headlineSmall),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 16.0, 0, 36.0),
+                child: Text(
+                    'Location: (${postDetails.latitude}, ${postDetails.longitude})'),
+              )
             ],
           ),
         ));
