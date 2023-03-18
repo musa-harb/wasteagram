@@ -41,7 +41,6 @@ class _NewPostState extends State<NewPost> {
       key: formKey,
       child: TextFormField(
         keyboardType: TextInputType.number,
-        autofocus: true,
         textAlign: TextAlign.center,
         decoration: const InputDecoration(
           hintText: "Number of Wasted Items",          

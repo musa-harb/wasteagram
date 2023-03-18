@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../widgets/app_scaffold.dart';
-import '../models/post.dart';
+import '../models/food_waste_post.dart';
 
 class PostDetails extends StatelessWidget {
   static const routeName = 'details';
@@ -11,7 +11,7 @@ class PostDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Post postDetails = ModalRoute.of(context)?.settings.arguments as Post;
+    FoodWastePost postDetails = ModalRoute.of(context)?.settings.arguments as FoodWastePost;
     return AppScaffold(
         screenName: screenName,
         screen: Center(

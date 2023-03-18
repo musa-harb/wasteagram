@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'post_details.dart';
 import '../widgets/app_scaffold.dart';
-import '../models/post.dart';
+import '../models/food_waste_post.dart';
 
 class HomePage extends StatefulWidget {
   static const routeName = '/';
@@ -20,7 +20,7 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   File? image;
   final picker = ImagePicker();
-  Post? postDetail;
+  FoodWastePost? postDetail;
   var totalWaste = 0;
   var tempTotalWaste = 0;
 
@@ -49,7 +49,7 @@ class HomePageState extends State<HomePage> {
                     resetTotalWaste();
                   }
                 });
-                return const Center(child: Text('No wastes posts recorded!'));
+                return const Center(child: CircularProgressIndicator());
               }
 
               return Column(
@@ -62,8 +62,8 @@ class HomePageState extends State<HomePage> {
                               updateTotalWaste();
                             });
 
-                            Post post =
-                                Post.fromMap(snapshot.data!.docs[index].data());
+                            FoodWastePost post =
+                                FoodWastePost.fromMap(snapshot.data!.docs[index].data());
 
                             tempTotalWaste = tempTotalWaste + post.wasteQty;
 
