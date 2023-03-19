@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 import '../widgets/app_scaffold.dart';
+import '../services/post_location.dart';
 
 class NewPost extends StatefulWidget {
   static const routeName = 'new';
@@ -28,7 +29,7 @@ class _NewPostState extends State<NewPost> {
   }
 
   void callRetrieveLocation() async {
-    await retrieveLocation();
+    locationData = await retrievePostLocation();
   }
 
   @override
@@ -84,7 +85,6 @@ class _NewPostState extends State<NewPost> {
   }
 
   void saveToDataBase(int wasteQty) async {
-    //await retrieveLocation();
     final url = await storeAndgetImageURL(image!);
     FirebaseFirestore.instance.collection('posts').add({
       'date': DateTime.now().toString(),
@@ -93,33 +93,6 @@ class _NewPostState extends State<NewPost> {
       'longitude': locationData!.longitude,
       'quantity': wasteQty
     });
-  }
-
-  Future retrieveLocation() async {
-    try {
-      var _serviceEnabled = await locationService.serviceEnabled();
-      if (!_serviceEnabled) {
-        _serviceEnabled = await locationService.requestService();
-        if (!_serviceEnabled) {
-          print('Failed to enable service. Returning.');
-          return;
-        }
-      }
-
-      var _permissionGranted = await locationService.hasPermission();
-      if (_permissionGranted == PermissionStatus.denied) {
-        _permissionGranted = await locationService.requestPermission();
-        if (_permissionGranted != PermissionStatus.granted) {
-          print('Location service permission not granted. Returning.');
-        }
-      }
-
-      locationData = await locationService.getLocation();
-    } on PlatformException catch (e) {
-      print('Error: ${e.toString()}, code: ${e.code}');
-      locationData = null;
-    }
-    locationData = await locationService.getLocation();
   }
 
   Future storeAndgetImageURL(File image) async {

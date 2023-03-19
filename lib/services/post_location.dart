@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 var locationService = Location();
 
-Future retrieveLocation() async {
+Future retrievePostLocation() async {
     try {
       var _serviceEnabled = await locationService.serviceEnabled();
       if (!_serviceEnabled) {
