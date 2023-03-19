@@ -34,6 +34,7 @@ class AppScaffold extends StatelessWidget {
 
   Widget cameraFab(BuildContext context) {
     return Semantics(
+      label: 'Camera icon button to take a waste picture and create a new waste post',
       enabled: true,
       onTapHint: 'Take a picture of food waste',
       child: FloatingActionButton(

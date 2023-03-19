@@ -60,6 +60,7 @@ class _NewPostState extends State<NewPost> {
     return FractionallySizedBox(
       widthFactor: 1,
       child: Semantics(
+        label: 'Save button to save the new waste post to the database',
         enabled: true,
         onTapHint: 'Tab to save the food waste post',
         child: ElevatedButton(

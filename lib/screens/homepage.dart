@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'post_details.dart';
@@ -68,6 +66,7 @@ class HomePageState extends State<HomePage> {
 
   Widget gestureDetector(FoodWastePost post) {
     return Semantics(
+      label: 'Waste post dated ${post.postDate} with ${post.wasteQty} items',
       enabled: true,
       onTapHint: 'Tap to view the food waste post details',
       child: GestureDetector(
