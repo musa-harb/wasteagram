@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:test/test.dart';
 import 'post_details.dart';
 import '../widgets/app_scaffold.dart';
 import '../models/food_waste_post.dart';
@@ -41,36 +40,39 @@ class HomePageState extends State<HomePage> {
             stream: FirebaseFirestore.instance.collection('posts').snapshots(),
             builder: (context, snapshot) {
               tempTotalWaste = 0;
+
               if (!snapshot.hasData) {
-                return const Center(child: CircularProgressIndicator());
+                setPostRunEmptyDatabase();
+                return emptyDatabaseWidget();
               }
+
               if (snapshot.data!.docs.isEmpty) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (totalWaste != 0) {
-                    resetTotalWaste();
-                  }
-                });
-                return const Center(child: CircularProgressIndicator());
+                setPostRunEmptyDatabase();
+                return emptyDatabaseWidget();
               }
+              
               List postsList = addSortPostsList(snapshot.data!.docs);
               return buildPostsList(postsList);
             }));
   }
 
-  Widget buildPostsList(List foodWastePosts){
+  Widget emptyDatabaseWidget() {
+    return const Center(child: CircularProgressIndicator());
+  }
+
+  Widget buildPostsList(List foodWastePosts) {
     return Column(
       children: [
         Expanded(
-          child: ListView.builder(
-            itemCount: foodWastePosts.length,
-            itemBuilder: (context, index) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                updateTotalWaste();});
-                incrementTotalWaste(foodWastePosts[index]);
-                return gestureDetector(foodWastePosts[index]);
-                }
-          )
-        )
+            child: ListView.builder(
+                itemCount: foodWastePosts.length,
+                itemBuilder: (context, index) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    updateTotalWaste();
+                  });
+                  incrementTotalWaste(foodWastePosts[index]);
+                  return gestureDetector(foodWastePosts[index]);
+                }))
       ],
     );
   }
@@ -108,6 +110,14 @@ class HomePageState extends State<HomePage> {
     final month = DateFormat.yMMMMd().format(dateTime).toString();
     final modifiedDateTime = '$day, $month';
     return modifiedDateTime;
+  }
+
+  void setPostRunEmptyDatabase() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (totalWaste != 0) {
+        resetTotalWaste();
+      }
+    });
   }
 
   void incrementTotalWaste(FoodWastePost post) {
