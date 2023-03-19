@@ -41,15 +41,11 @@ class HomePageState extends State<HomePage> {
               }
               
               List postsList = addSortPostsList(snapshot.data!.docs);
-              return buildPostsList(postsList);
+              return buildPostsListView(postsList);
             }));
   }
 
-  Widget emptyDatabaseWidget() {
-    return const Center(child: CircularProgressIndicator());
-  }
-
-  Widget buildPostsList(List foodWastePosts) {
+  Widget buildPostsListView(List foodWastePosts) {
     return Column(
       children: [
         Expanded(
@@ -64,6 +60,10 @@ class HomePageState extends State<HomePage> {
                 }))
       ],
     );
+  }
+
+  Widget emptyDatabaseWidget() {
+    return const Center(child: CircularProgressIndicator());
   }
 
   Widget gestureDetector(FoodWastePost post) {
