@@ -22,6 +22,16 @@ class _NewPostState extends State<NewPost> {
   File? image;
 
   @override
+  void initState() {
+    super.initState();
+    callRetrieveLocation();
+  }
+
+  void callRetrieveLocation() async {
+    await retrieveLocation();
+  }
+
+  @override
   Widget build(BuildContext context) {
     image = ModalRoute.of(context)?.settings.arguments as File;
     return AppScaffold(
@@ -43,7 +53,7 @@ class _NewPostState extends State<NewPost> {
         keyboardType: TextInputType.number,
         textAlign: TextAlign.center,
         decoration: const InputDecoration(
-          hintText: "Number of Wasted Items",          
+          hintText: "Number of Wasted Items",
         ),
         style: Theme.of(context).textTheme.headlineMedium,
         onSaved: (value) {
@@ -58,19 +68,23 @@ class _NewPostState extends State<NewPost> {
   Widget saveButton(BuildContext context) {
     return FractionallySizedBox(
       widthFactor: 1,
-      child: ElevatedButton(
-          onPressed: () {
-            if (formKey.currentState!.validate()) {
-              formKey.currentState!.save();
-              Navigator.pop(context);
-            }
-          },
-          child: const Icon(Icons.cloud_upload)),
+      child: Semantics(
+        enabled: true,
+        onTapHint: 'Tab to save the food waste post',
+        child: ElevatedButton(
+            onPressed: () {
+              if (formKey.currentState!.validate()) {
+                formKey.currentState!.save();
+                Navigator.pop(context);
+              }
+            },
+            child: const Icon(Icons.cloud_upload)),
+      ),
     );
   }
 
   void saveToDataBase(int wasteQty) async {
-    await retrieveLocation();
+    //await retrieveLocation();
     final url = await storeAndgetImageURL(image!);
     FirebaseFirestore.instance.collection('posts').add({
       'date': DateTime.now().toString(),

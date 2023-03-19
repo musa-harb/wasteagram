@@ -24,7 +24,7 @@ class AppScaffold extends StatelessWidget {
         body: screen,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton:
-            checkScreenName(screenName) ? fab(context) : null);
+            checkScreenName(screenName) ? cameraFab(context) : null);
   }
 
   bool checkScreenName(String screenName) {
@@ -32,17 +32,21 @@ class AppScaffold extends StatelessWidget {
         screenName != PostDetails.screenName);
   }
 
-  Widget fab(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () async {
-        HomePageState homePageState =
-            context.findAncestorStateOfType<HomePageState>() as HomePageState;
-        final image = await homePageState.getImage();
-        if (image != null) {
-          Navigator.pushNamed(context, NewPost.routeName, arguments: image);
-        }
-      },
-      child: const Icon(Icons.camera_alt),
+  Widget cameraFab(BuildContext context) {
+    return Semantics(
+      enabled: true,
+      onTapHint: 'Take a picture of food waste',
+      child: FloatingActionButton(
+        onPressed: () async {
+          HomePageState homePageState =
+              context.findAncestorStateOfType<HomePageState>() as HomePageState;
+          final image = await homePageState.getImage();
+          if (image != null) {
+            Navigator.pushNamed(context, NewPost.routeName, arguments: image);
+          }
+        },
+        child: const Icon(Icons.camera_alt),
+      ),
     );
   }
 }

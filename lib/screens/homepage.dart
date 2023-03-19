@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:test/test.dart';
 import 'post_details.dart';
 import '../widgets/app_scaffold.dart';
 import '../models/food_waste_post.dart';
@@ -26,10 +27,10 @@ class HomePageState extends State<HomePage> {
 
   Future getImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
-    if(pickedFile != null){
-      image = File(pickedFile.path);    
+    if (pickedFile != null) {
+      image = File(pickedFile.path);
       return image;
-    }    
+    }
   }
 
   @override
@@ -51,35 +52,40 @@ class HomePageState extends State<HomePage> {
                 });
                 return const Center(child: CircularProgressIndicator());
               }
-
-              return Column(
-                children: [
-                  Expanded(
-                      child: ListView.builder(
-                          itemCount: snapshot.data!.docs.length,
-                          itemBuilder: (context, index) {
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              updateTotalWaste();
-                            });
-
-                            FoodWastePost post =
-                                FoodWastePost.fromMap(snapshot.data!.docs[index].data());
-
-                            tempTotalWaste = tempTotalWaste + post.wasteQty;
-
-                            return GestureDetector(
-                              child:
-                                  listTileWidget(post.postDate, post.wasteQty),
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, PostDetails.routeName,
-                                    arguments: post);
-                              },
-                            );
-                          }))
-                ],
-              );
+              List postsList = addSortPostsList(snapshot.data!.docs);
+              return buildPostsList(postsList);
             }));
+  }
+
+  Widget buildPostsList(List foodWastePosts){
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: foodWastePosts.length,
+            itemBuilder: (context, index) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                updateTotalWaste();});
+                incrementTotalWaste(foodWastePosts[index]);
+                return gestureDetector(foodWastePosts[index]);
+                }
+          )
+        )
+      ],
+    );
+  }
+
+  Widget gestureDetector(FoodWastePost post) {
+    return Semantics(
+      enabled: true,
+      onTapHint: 'Tap to view the food waste post details',
+      child: GestureDetector(
+        child: listTileWidget(post.postDate, post.wasteQty),
+        onTap: () {
+          Navigator.pushNamed(context, PostDetails.routeName, arguments: post);
+        },
+      ),
+    );
   }
 
   Widget listTileWidget(DateTime date, int qty) {
@@ -90,6 +96,13 @@ class HomePageState extends State<HomePage> {
     );
   }
 
+  List<dynamic> addSortPostsList(List wastePosts) {
+    final postsList =
+        wastePosts.map((post) => FoodWastePost.fromMap(post.data())).toList();
+    postsList.sort((a, b) => b.postDate.compareTo(a.postDate));
+    return postsList;
+  }
+
   String formateDate(DateTime dateTime) {
     final day = DateFormat.EEEE().format(dateTime).toString();
     final month = DateFormat.yMMMMd().format(dateTime).toString();
@@ -97,7 +110,9 @@ class HomePageState extends State<HomePage> {
     return modifiedDateTime;
   }
 
-  void incrementTotalWaste() {}
+  void incrementTotalWaste(FoodWastePost post) {
+    tempTotalWaste = tempTotalWaste + post.wasteQty;
+  }
 
   void updateTotalWaste() {
     if (totalWaste != tempTotalWaste) {

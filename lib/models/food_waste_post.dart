@@ -1,13 +1,13 @@
 class FoodWastePost {
   final DateTime postDate;
-  final String postURL;
+  final String imageURL;
   final double latitude;
   final double longitude;
   final int wasteQty;
 
   const FoodWastePost(
       {required this.postDate,
-      required this.postURL,
+      required this.imageURL,
       required this.latitude,
       required this.longitude,
       required this.wasteQty});
@@ -15,7 +15,7 @@ class FoodWastePost {
   factory FoodWastePost.fromMap(Map<dynamic, dynamic> postDetails) {
     return FoodWastePost(
       postDate: DateTime.parse(postDetails['date']),
-      postURL: postDetails['imageURL'],
+      imageURL: postDetails['imageURL'],
       latitude: postDetails['latitude'],
       longitude: postDetails['longitude'],
       wasteQty: postDetails['quantity'],

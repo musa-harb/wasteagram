@@ -24,7 +24,7 @@ class PostDetails extends StatelessWidget {
               ),
               Expanded(
                 child: FadeInImage.memoryNetwork(
-                    placeholder: kTransparentImage, image: postDetails.postURL),
+                    placeholder: kTransparentImage, image: postDetails.imageURL),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 16.0, 0, 16.0),
