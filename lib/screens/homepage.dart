@@ -1,6 +1,6 @@
-import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'post_details.dart';
@@ -18,19 +18,8 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  File? image;
-  final picker = ImagePicker();
-  FoodWastePost? postDetail;
   var totalWaste = 0;
   var tempTotalWaste = 0;
-
-  Future getImage() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.camera);
-    if (pickedFile != null) {
-      image = File(pickedFile.path);
-      return image;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +31,12 @@ class HomePageState extends State<HomePage> {
               tempTotalWaste = 0;
 
               if (!snapshot.hasData) {
-                setPostRunEmptyDatabase();
+                setPostBuild();
                 return emptyDatabaseWidget();
               }
 
               if (snapshot.data!.docs.isEmpty) {
-                setPostRunEmptyDatabase();
+                setPostBuild();
                 return emptyDatabaseWidget();
               }
               
@@ -112,7 +101,7 @@ class HomePageState extends State<HomePage> {
     return modifiedDateTime;
   }
 
-  void setPostRunEmptyDatabase() {
+  void setPostBuild() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (totalWaste != 0) {
         resetTotalWaste();

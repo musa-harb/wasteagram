@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/services.dart';
 import 'package:location/location.dart';
 import '../widgets/app_scaffold.dart';
 import '../services/post_location.dart';
@@ -22,15 +21,6 @@ class _NewPostState extends State<NewPost> {
   var locationService = Location();
   File? image;
 
-  @override
-  void initState() {
-    super.initState();
-    callRetrieveLocation();
-  }
-
-  void callRetrieveLocation() async {
-    locationData = await retrievePostLocation();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,8 +63,11 @@ class _NewPostState extends State<NewPost> {
         enabled: true,
         onTapHint: 'Tab to save the food waste post',
         child: ElevatedButton(
-            onPressed: () {
-              if (formKey.currentState!.validate()) {
+            onPressed: () async {
+              locationData = await retrievePostLocation();
+              if (locationData == null) {
+                locationPermissionDialog(context);
+              } else if (formKey.currentState!.validate()) {
                 formKey.currentState!.save();
                 Navigator.pop(context);
               }
@@ -82,6 +75,24 @@ class _NewPostState extends State<NewPost> {
             child: const Icon(Icons.cloud_upload)),
       ),
     );
+  }
+
+  void locationPermissionDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+              title: const Text('Location Service Not Permitted'),
+              content:
+                  const Text('Please enable location services and try again'),
+              actions: [
+                TextButton(
+                  child: const Text('OK!'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+            ));
   }
 
   void saveToDataBase(int wasteQty) async {

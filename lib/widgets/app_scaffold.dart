@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../screens/homepage.dart';
 import '../screens/new_post.dart';
 import '../screens/post_details.dart';
+import '../services/post_camera.dart';
 
 class AppScaffold extends StatelessWidget {
   final String screenName;
@@ -38,9 +38,7 @@ class AppScaffold extends StatelessWidget {
       onTapHint: 'Take a picture of food waste',
       child: FloatingActionButton(
         onPressed: () async {
-          HomePageState homePageState =
-              context.findAncestorStateOfType<HomePageState>() as HomePageState;
-          final image = await homePageState.getImage();
+          final image = await getImage();
           if (image != null) {
             Navigator.pushNamed(context, NewPost.routeName, arguments: image);
           }
